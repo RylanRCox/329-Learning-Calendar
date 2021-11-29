@@ -19,11 +19,11 @@ onodes = [ find(cellfun(@isempty, strfind(names,'Busyness'))==0) find(cellfun(@i
 onodes = sort(onodes)
 
 % discretize nodes
-NR   = 2;     % two hidden states
-BZNS = 3;     % three observable states
-PREF = 2;     % three observable states
+NR   = 2;     
+BZNS = 3;     
+PREF = 2;     
 CR   = 3;
-ns   = [NR PREF BZNS CR];
+ns   = [NR BZNS PREF CR];
 dnodes = 1:ss;
 
 % define equivalence classes
@@ -70,6 +70,6 @@ bnet.CPD{Busyness} = tabular_CPD( bnet, Busyness, 'CPT', cpt );
 
 % transition function, Pr(CheckedCalendarRecently_t | NeedReminder_t)
  cpt = [.1 0.4 0.2 0.4 0.7 0.2];
-bnet.CPD{Busyness} = tabular_CPD( bnet, Busyness, 'CPT', cpt );
+bnet.CPD{CheckedCalendarRecently} = tabular_CPD( bnet, CheckedCalendarRecently, 'CPT', cpt );
 
 DBN = bnet;
