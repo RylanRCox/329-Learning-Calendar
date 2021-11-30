@@ -3,7 +3,7 @@ function prNeedReminder = sim( needreminder_dbn, urgency_dbn, ex )
 % set up inference engines
 NeedReminder_engine = bk_inf_engine( needreminder_dbn );    
 Urgency_engine = bk_inf_engine( urgency_dbn );
-T = 50;                          % define number of time steps in problem
+T = 10;                          % define number of time steps in problem
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % generate a series of evidence in advance
@@ -26,7 +26,7 @@ elseif ex == 2,
     %NeedReminder
     evidence{2,ii} = 3; % Busyness =   {1 = Not Busy | 2 = Busy | 3 = Very Busy}
     evidence{3,ii} = 1; % Preference =  {1 = ~WantReminder | 2 = WantReminder}
-    evidence{4,ii} = 1; % CheckedCalendar = {1 = WithinMonth | 2 = WithinWeek | 3 = WithinDay}
+    evidence{4,ii} = 2; % CheckedCalendar = {1 = WithinMonth | 2 = WithinWeek | 3 = WithinDay}
     %Urgency
     evidence2{2,ii} = 1; % Importance = {1 = NotImportant| 2 = Important| 3 = VeryImportant}
     evidence2{3,ii} = 2; % TimeToEvent ={1 = Far | 2 = Medium | 3 = Soon}
