@@ -5,31 +5,36 @@ ss    = length( names );
 DBN   = names;
 
 % intra-stage dependencies
-intrac = {'Urgency', 'NeedReminder'; 'Urgency','TimeUntilEvent';'Urgency','EventImportance';'NeedReminder','Busyness';'NeedReminder','LastCheckedCalendar'};
+intrac = {'Urgency', 'NeedReminder'; 'Urgency','TimeUntilEvent';'Urgency','EventImportance';'Busyness','NeedReminder';'LastCheckedCalendar','NeedReminder'};
 [intra, names] = mk_adj_mat( intrac, names, 1 );
 DBN = names   % potentially re-ordered names
 
 %inter-stage dependencies
 interc = {...
-'NeedReminder', 'NeedReminder'};
+'NeedReminder', 'NeedReminder'; 'Urgency', 'Urgency'};
 inter = mk_adj_mat( interc, names, 0 );
+
+%interc = {...
+%'Urgency', 'Urgency'};
+%inter = mk_adj_mat( interc, names, 0 );
 
 % observations
 onodes = [ find(cellfun(@isempty, strfind(names,'Busyness'))==0) find(cellfun(@isempty, strfind(names,'LastCheckedCalendar'))==0) find(cellfun(@isempty, strfind(names,'TimeUntilEvent'))==0) find(cellfun(@isempty, strfind(names,'EventImportance'))==0)]
 onodes = sort(onodes)
 
 % discretize nodes
-URG   = 2;
-NR    = 2;
-BZNS = 3;     
-PREF = 2;     
-CR   = 3;
-ns   = [URG BZNS PREF CR];
+URG     = 2;
+NR      = 2;
+BZNS    = 3;          
+LCC     = 3;
+TUE     = 3;
+EI      = 3;
+ns   = [URG NR BZNS LCC TUE EI];
 dnodes = 1:ss;
 
 % define equivalence classes
-ecl1 = [1 2 3 4];
-ecl2 = [5 2 3 4];   % nodes 6 7 and 8 are tied to nodes 2 3 and 4
+ecl1 = [1 2 5 6];
+ecl2 = [7 2 5 6];   % nodes 6 7 and 8 are tied to nodes 2 3 and 4
 
 % create the dbn structure based on the components defined above
 bnet = mk_dbn( intra, inter, ns, ...
@@ -60,10 +65,6 @@ bnet.CPD{NeedReminder0} = tabular_CPD( bnet, NeedReminder0, 'CPT', cpt );
 % transition function, Pr(NeedReminder_t|NeedReminder_t-1)
 cpt = [.6 .1 .4 .9];
 bnet.CPD{NeedReminder1} = tabular_CPD( bnet, NeedReminder1, 'CPT', cpt );
-
-% observation function, Pr(Preferences_t|NeedReminder_t)
- cpt = [.7 .4 .3 .6];
-bnet.CPD{Preferences} = tabular_CPD(bnet, Preferences, 'CPT', cpt ); 
 
 % transition function, Pr(Busyness_t | NeedReminder_t)
  cpt = [.75 0.15 0.2 0.35 0.05 0.5];
