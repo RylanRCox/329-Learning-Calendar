@@ -65,7 +65,7 @@ bnet.CPD{NeedReminder1} = tabular_CPD( bnet, NeedReminder1, 'CPT', cpt );
 bnet.CPD{Preferences} = tabular_CPD(bnet, Preferences, 'CPT', cpt ); 
 
 % transition function, Pr(Busyness_t | NeedReminder_t)
- cpt = [.75 0.15 0.2 0.8 0.05 0.8];
+ cpt = [.75 0.15 0.2 0.35 0.05 0.5];
 bnet.CPD{Busyness} = tabular_CPD( bnet, Busyness, 'CPT', cpt );
 
 % transition function, Pr(CheckedCalendarRecently_t | NeedReminder_t)
