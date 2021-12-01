@@ -1,4 +1,4 @@
-function DBN = mk_dbn
+function DBN = mk_reminders
 
 names = {'Urgency','NeedReminder', 'Busyness','CheckedCalendarRecently','TimeUntilEvent','EventImportance'};   % easier to refer to later
 ss    = length( names );
@@ -29,7 +29,7 @@ BZNS    = 3;
 CCR     = 3;
 TUE     = 3;
 EI      = 3;
-ns   = [URG NR BZNS CCR TUE EI];
+ns   = [CCR BZNS URG EI TUE NR];
 dnodes = 1:ss;
 
 % define equivalence classes
@@ -52,14 +52,14 @@ DBN  = bnet;
 % observation function, Pr(Correct_t |NeedHelp_t)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Urgency0                = 1;
-NeedReminder0           = 2;
-Busyness                = 3;
-CheckedCalendarRecently = 4;
+Urgency0                = 3;
+NeedReminder0           = 6;
+Busyness                = 2;
+CheckedCalendarRecently = 1;
 TimeUntilEvent          = 5;
-EventImportance         = 6;
-Urgency1                = 7;
-NeedReminder1           = 8;
+EventImportance         = 4;
+Urgency1                = 9;
+NeedReminder1           = 12;
 
 cpt = normalize( ones(URG,1) );
 bnet.CPD{Urgency0} = tabular_CPD( bnet, Urgency0, 'CPT', cpt );
@@ -69,13 +69,17 @@ cpt = [ 0.55 0.15 ...
 bnet.CPD{Urgency1} = tabular_CPD( bnet, Urgency1, 'CPT', cpt );
 
 % prior, Pr(NeedReminder0)
-cpt = [0.95 0.9 0.85 0.9 0.6 0.3 0.7 0.35 0.25 0.85 0.35 0.2 0.6 0.3 0.1 0.5 0.1 0.05 ...
-       0.05 0.1 0.15 0.1 0.4 0.7 0.3 0.65 0.75 0.15 0.65 0.8 0.4 0.7 0.9 0.5 0.9 0.95];
+cpt = [0.95 0.9 0.85 0.9 0.6 0.3 0.7 0.35 0.25 0.75 0.35 0.3 0.7 0.4 0.1 ...
+       0.15 0.1 0.05 0.05 0.1 0.15 0.1 0.4 0.7 0.3 0.65 0.75 0.25 0.65 0.7 ...
+       0.3 0.6 0.9 0.85 0.9 0.95];
 bnet.CPD{NeedReminder0} = tabular_CPD( bnet, NeedReminder0, 'CPT', cpt );
 
 % transition function, Pr(NeedReminder_t|NeedReminder_t-1)
-cpt = [.65 .1 ...
-       .35 .9];
+cpt = [0.98 0.95 0.93 0.95 0.9 0.85 0.85 0.8 0.75 0.8 0.6 0.35 0.75 0.4 0.3 ...
+       0.4 0.2 0.05 0.95 0.8 0.6 0.7 0.6 0.25 0.65 0.4 0.2 0.25 0.2 0.15 ... 
+       0.15 0.1 0.05 0.07 0.05 0.02 0.02 0.05 0.07 0.05 0.1 0.15 0.15 0.2 ...
+       0.25 0.2 0.4 0.65 0.25 0.6 0.7 0.6 0.8 0.95 0.05 0.2 0.4 0.3 0.4 ...
+       0.75 0.35 0.6 0.8 0.75 0.8 0.85 0.85 0.9 0.95 0.93 0.95 0.98];
 bnet.CPD{NeedReminder1} = tabular_CPD( bnet, NeedReminder1, 'CPT', cpt );
 
 % transition function, Pr(Busyness_t | NeedReminder_t)
@@ -86,9 +90,9 @@ bnet.CPD{Busyness} = tabular_CPD( bnet, Busyness, 'CPT', cpt );
  cpt = [0.6 0.3 0.1];
 bnet.CPD{CheckedCalendarRecently} = tabular_CPD( bnet, CheckedCalendarRecently, 'CPT', cpt );
 
- cpt = [0.1 0.55 ...
+ cpt = [0.7 0.05 ...
         0.2 0.4 ...
-        0.7 0.05];
+        0.1 0.55];
 bnet.CPD{TimeUntilEvent} = tabular_CPD( bnet, TimeUntilEvent, 'CPT', cpt );
 
  cpt = [0.45 0.2 ...
