@@ -5,13 +5,13 @@ ss    = length( names );
 DBN   = names;
 
 % intra-stage dependencies
-intrac = {'Urgency', 'NeedReminder'; 'Urgency','TimeUntilEvent';'Urgency','EventImportance';'Busyness','NeedReminder';'CheckedCalendarRecently','NeedReminder'};
+intrac = {'Urgency', 'NeedReminder';'TimeUntilEvent','Urgency';'EventImportance','Urgency';'Busyness','NeedReminder';'CheckedCalendarRecently','NeedReminder'};
 [intra, names] = mk_adj_mat( intrac, names, 1 );
 DBN = names   % potentially re-ordered names
 
 %inter-stage dependencies
 interc = {...
-'NeedReminder', 'NeedReminder'; 'Urgency', 'Urgency'};
+'NeedReminder', 'NeedReminder'; 'Urgency', 'Urgency';};
 inter = mk_adj_mat( interc, names, 0 );
 
 %interc = {...
@@ -24,17 +24,17 @@ onodes = sort(onodes)
 
 % discretize nodes
 URG     = 2;
-NR      = 2;
+NR      = 3;
 BZNS    = 3;          
 CCR     = 3;
 TUE     = 3;
-EI      = 3;
+EI      = 2;
 ns   = [CCR BZNS URG EI TUE NR];
 dnodes = 1:ss;
 
 % define equivalence classes
 ecl1 = [1 2 3 4 5 6];
-ecl2 = [7 8 3 4 5 6];   % nodes 6 7 and 8 are tied to nodes 2 3 and 4
+ecl2 = [7 8 3 4 9 6];   % nodes 6 7 and 8 are tied to nodes 2 3 and 4
 
 % create the dbn structure based on the components defined above
 bnet = mk_dbn( intra, inter, ns, ...
@@ -56,11 +56,12 @@ Urgency0                = 3;
 NeedReminder0           = 6;
 Busyness                = 2;
 CheckedCalendarRecently = 1;
-TimeUntilEvent          = 5;
+TimeUntilEvent0         = 5;
 EventImportance         = 4;
 Urgency1                = 9;
 NeedReminder1           = 12;
 
+%TODO: Update Urgency CPTs
 cpt = normalize( ones(URG,1) );
 bnet.CPD{Urgency0} = tabular_CPD( bnet, Urgency0, 'CPT', cpt );
 
@@ -93,7 +94,7 @@ bnet.CPD{CheckedCalendarRecently} = tabular_CPD( bnet, CheckedCalendarRecently, 
  cpt = [0.7 0.05 ...
         0.2 0.4 ...
         0.1 0.55];
-bnet.CPD{TimeUntilEvent} = tabular_CPD( bnet, TimeUntilEvent, 'CPT', cpt );
+bnet.CPD{TimeUntilEvent0} = tabular_CPD( bnet, TimeUntilEvent0, 'CPT', cpt );
 
  cpt = [0.45 0.2 ...
         0.35 0.3 ...
