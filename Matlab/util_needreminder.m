@@ -1,6 +1,6 @@
 function val = util_needreminder( NeedReminder )
 % action = determine if we need to give a reminder
-% NeedReminder = 1 (false), 2 (true)
+% NeedReminder = 1 (No Reminder), 2 (Email Reminder) 3 (Pop up reminder)
 %
 % utility_value \in [-5,+5]
 %

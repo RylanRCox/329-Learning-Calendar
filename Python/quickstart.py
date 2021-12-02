@@ -46,3 +46,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# TODO: Get event data regarding distance to event, how important the event is
+# TODO: Get data regarding how busy user schedule is, and when the last time they checked their calendar was
+#
+#
