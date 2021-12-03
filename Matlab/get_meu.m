@@ -6,7 +6,9 @@ action = 'None';
 % compute expected utility of each action
 % EU(A) = sum_Read Pr(Read) x U(A, Read)
 %
-eu_None = 0;
+
+
+eu_None = 
 
 eu_EmailReminder = prNoReminder * util_needreminder( 2 ) + ...
           (1 - prNoReminder) * util_needreminder( 1 );
