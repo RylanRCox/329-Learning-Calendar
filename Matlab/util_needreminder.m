@@ -9,12 +9,15 @@ function val = util_needreminder( NeedReminder )
 val = 0;
 
 % doing stuff for the user gets a disruption penalty
-val = val - 1; 
 
-if NeedReminder == 1,
-  val = val - 3;
-  % Results in -4
+%Utility of doing nothing
+if NeedReminder == 1
+  val = val - 5;
+%Utility of sending a pop-up
+elseif NeedReminder == 2
+  val = val + 2;
+%Utility of sending an email
 else
-  val = val + 5;
-  % Results in +4
+   val = val + 4;
+    
 end;
