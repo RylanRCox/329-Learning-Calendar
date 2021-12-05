@@ -12,10 +12,10 @@ val = 0;
 
 %Utility of doing nothing
 if NeedReminder == 1
-  val = val - 5;
+  val = val - 4;
 %Utility of sending a pop-up
 elseif NeedReminder == 2
-  val = val + 2;
+  val = val + 3;
 %Utility of sending an email
 else
    val = val + 4;
