@@ -19,7 +19,7 @@ elseif ex == 2,
     %NeedReminder
     evidence{1,ii} = 2; % Importance = {1 = NotImportant| 2 = Important}
     evidence{2,ii} = 1; % TimeToEvent ={1 = VeryClose | 2 = Medium | 3 = Far}
-    evidence{4,ii} = 1; % CheckedCalendar = {1 = Daily | 2 = Weekly | 3 = Monthly}
+    evidence{4,ii} = 3; % CheckedCalendar = {1 = Daily | 2 = Weekly | 3 = Monthly}
     evidence{5,ii} = 3; % Busyness =   {1 = Not Busy | 2 = Busy | 3 = Very Busy}
   end;
 else
