@@ -1,7 +1,7 @@
 function [action, eu_None,eu_EmailReminder, eu_PopUpReminder] = get_meu(prEmailReminder, prPopUpReminder )
 
 % set default
-action = 'None';
+action = 'none';
 
 % compute expected utility of each action
 % EU(A) = sum_Read Pr(Read) x U(A, Read)
@@ -21,8 +21,8 @@ eu_EmailReminder = prEmailReminder * util_needreminder( 3 ) + ...
           (1 - (prPopUpReminder + prEmailReminder)) * util_needreminder( 1 );
 
 if eu_EmailReminder > eu_None && eu_EmailReminder > eu_PopUpReminder
-    action = "Email";
+    action = "email";
 elseif eu_PopUpReminder > eu_None && eu_PopUpReminder > eu_EmailReminder
-    action = "Pop-up";
+    action = "popup";
 end
 
