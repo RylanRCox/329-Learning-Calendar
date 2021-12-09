@@ -1,4 +1,4 @@
-function actionArray = sim_reminder( needreminder_dbn, ex, IMP, TUE, CCR, BSY )
+function actionArray = sim_reminder( needreminder_dbn, IMP, TUE, CCR, BSY )
 
 % set up inference engines
 engine = bk_inf_engine( needreminder_dbn );    
