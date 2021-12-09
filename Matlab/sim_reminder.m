@@ -1,31 +1,18 @@
-function prNeedReminder = sim_reminder( needreminder_dbn, ex )
+function actionArray = sim_reminder( needreminder_dbn, ex, IMP, TUE, CCR, BSY )
 
 % set up inference engines
 engine = bk_inf_engine( needreminder_dbn );    
 T = 7;                          % define number of time steps in problem
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % generate a series of evidence in advance
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if ex == 1,
-  % NeedReminder
-  ev = sample_dbn( needreminder_dbn, T);
-  evidence = cell( 6, T);
-  onodes   = needreminder_dbn.observed;
-  evidence( onodes, : ) = ev( onodes, : ); % all cells besides onodes are empty
-elseif ex == 2,
-  evidence = cell( 6, T);
-  for ii=1:T,
+evidence = cell( 6, T);
+for ii=1:T,
     %NeedReminder
-    evidence{1,ii} = 1; % Importance = {1 = NotImportant| 2 = Important}
-    evidence{2,ii} = 3; % TimeToEvent ={1 = VeryClose | 2 = Medium | 3 = Far}
-    evidence{4,ii} = 3; % CheckedCalendar = {1 = Daily | 2 = Weekly | 3 = Monthly}
-    evidence{5,ii} = 1; % Busyness =   {1 = Not Busy | 2 = Busy | 3 = Very Busy}
-  end;
-else
-  % TODO Update the fixed data
-  reminderVal = 1; % NeedReminder = {1 = No Reminder | 2 = Email | 3 = Pop-up}
-  evidence = sampleNeedReminder_seq( needreminder_dbn, reminderVal, T );
+    evidence{1,ii} = IMP; % Importance = {1 = NotImportant| 2 = Important}
+    evidence{2,ii} = TUE; % TimeToEvent ={1 = VeryClose | 2 = Medium | 3 = Far}
+    evidence{4,ii} = CCR; % CheckedCalendar = {1 = Daily | 2 = Weekly | 3 = Monthly}
+    evidence{5,ii} = BSY; % Busyness =   {1 = Not Busy | 2 = Busy | 3 = Very Busy}
 end;
 evidence;
 
@@ -37,7 +24,6 @@ evidence;
 belief =   []; % NeedReminder = False
 belief2 =  []; % NeedReminder = Email
 belief3 =  []; % NeedReminder = Pop-up
-exputil =  []; % exputil of not sending reminder
 exputil2 = []; % exputil of sending email
 exputil3 = []; % exputil of sending popup 
 subplot( 1, 2, 1 );    % setup plot for graph
@@ -47,29 +33,25 @@ subplot( 1, 2, 1 );    % setup plot for graph
 %
 prNeedReminder = get_field( needreminder_dbn.CPD{6}, 'cpt' );
 
-belief = [belief, prNeedReminder(1)];
 belief2 = [belief2, prNeedReminder(2)];
 belief3 = [belief3, prNeedReminder(3)];
 subplot( 1, 2, 1 );
-%plot( belief, 'o-');
-%hold on;
 plot(belief2,'*-');
-%hold off;
 hold on;
 plot(belief3,'*-');
 hold off;
 
 % log best decision
 [bestA, euNone,euEmail, euPopUp] = get_remindermeu( prNeedReminder(2), prNeedReminder(3));
-exputil = [exputil2, euNone];
+
+actionArray = [ bestA ];
+
 exputil2 = [exputil2, euEmail];
 exputil3 = [exputil3, euPopUp];
 disp(sprintf('t=%d: best action = %s ,euEmail = %f euPopup=%f', 0, bestA,euEmail, euPopUp));
 subplot( 1, 2, 2 );
-%plot( exputil, 'o-');
-%hold on;
+
 plot(exputil2, '*-');
-%hold off;
 hold on;
 plot(exputil3, '*-');
 hold off;
@@ -85,25 +67,21 @@ belief = [belief, prNeedReminder(1)];
 belief2 = [belief2, prNeedReminder(2)];
 belief3 = [belief3, prNeedReminder(3)];
 subplot( 1, 2, 1 );
-%plot( belief, 'o-');
-%hold on;
+
 plot(belief2,'*-');
-%hold off;
+
 hold on;
 plot(belief3,'*-');
 hold off;
 
 % log best decision
 [bestA, euNone,euEmail, euPopUp] = get_remindermeu(prNeedReminder(2),prNeedReminder(3));
-exputil = [exputil2, euNone];
+actionArray = [ actionArray bestA ];
 exputil2 = [exputil2, euEmail];
 exputil3 = [exputil3, euPopUp];
 disp(sprintf('t=%d: best action = %s, euEmail = %f euPopup=%f', 1, bestA,euEmail, euPopUp));
 subplot( 1, 2, 2 );
-%plot( exputil, 'o-');
-%hold on;
 plot(exputil2, '*-');
-%hold off;
 hold on;
 plot(exputil3, '*-');
 hold off;
@@ -133,19 +111,17 @@ for t=2:T,
 
   % log best decision
   [bestA, euNone, euEmail, euPopUp] = get_remindermeu( prNeedReminder(2), prNeedReminder(3));
+  
+  actionArray = [ actionArray bestA ];
+  
   exputil = [exputil2, euNone];
   exputil2 = [exputil2, euEmail];
   exputil3 = [exputil3, euPopUp];
   
-  bestA
-  
   disp(sprintf('t=%d: best action = %s, euEmail = %f euPopup=%f', t, bestA,euEmail, euPopUp));
   
   subplot( 1, 2, 2 );
-  %plot( exputil, 'o-');
-  %hold on;
   plot(exputil2, '*-');
-  %hold off;
   hold on;
   plot(exputil3, '*-');
   hold off;
@@ -161,10 +137,7 @@ for t=2:T,
   belief3 = [belief3, prNeedReminder(3)];
   
   subplot( 1, 2, 1 );
-  %plot( belief, 'o-');
-  %hold on;
   plot(belief2,'*-');
-  %hold off;
   hold on;
   plot(belief3,'*-');
   hold off;
