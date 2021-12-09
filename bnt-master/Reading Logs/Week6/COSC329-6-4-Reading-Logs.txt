@@ -1,0 +1,1 @@
+{"startTime":1634275160552,"eachContinue":[{"time":1634275309819,"section":"Remaining Relationships"},{"time":1634275325704,"section":"The Bayes Net Model"},{"time":1634275381547,"section":"Extension to a Dynamic Bayes Net"},{"time":1634275396964,"section":"Review Form"}],"eachQuizSubmit":[{"time":1634275395817,"q0":"ans"}],"endTime":1634275397550}

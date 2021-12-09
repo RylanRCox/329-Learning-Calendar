@@ -17,10 +17,10 @@ elseif ex == 2,
   evidence = cell( 6, T);
   for ii=1:T,
     %NeedReminder
-    evidence{1,ii} = 2; % Importance = {1 = NotImportant| 2 = Important}
-    evidence{2,ii} = 1; % TimeToEvent ={1 = VeryClose | 2 = Medium | 3 = Far}
+    evidence{1,ii} = 1; % Importance = {1 = NotImportant| 2 = Important}
+    evidence{2,ii} = 3; % TimeToEvent ={1 = VeryClose | 2 = Medium | 3 = Far}
     evidence{4,ii} = 3; % CheckedCalendar = {1 = Daily | 2 = Weekly | 3 = Monthly}
-    evidence{5,ii} = 3; % Busyness =   {1 = Not Busy | 2 = Busy | 3 = Very Busy}
+    evidence{5,ii} = 1; % Busyness =   {1 = Not Busy | 2 = Busy | 3 = Very Busy}
   end;
 else
   % TODO Update the fixed data
@@ -114,6 +114,16 @@ for t=2:T,
 
     %% THE FIRST TIME WE OBSERVE A CHANGE IN ACTION DETERMINES WHEN 
   % update belief with evidence at current time step
+  if t == 2 && evidence{2,t} ~= 1
+      for ii=2:T
+        evidence{2,ii} = evidence{2,ii} - 1;
+      end;
+  elseif t == 5 && evidence{2,t} ~= 1
+      for ii=2:T
+        evidence{2,ii} = evidence{2,ii} - 1;
+      end;
+  end;
+  evidence
   
   [engine, ll(t)] = dbn_update_bel(engine, evidence(:,t-1:t));
   % extract marginals of the current belief state
@@ -164,5 +174,7 @@ for t=2:T,
   axis( [ 0 T 0 1] );
   legend('Pr(EmailReminder)','Pr(PopUpReminder')
   pause(0.25);
+  
+  
 end;
 

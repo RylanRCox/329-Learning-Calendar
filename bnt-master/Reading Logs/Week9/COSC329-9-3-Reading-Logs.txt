@@ -1,0 +1,1 @@
+{"startTime":1635878996484,"eachContinue":[{"time":1635879053755,"section":"Adaptive Text Editor"},{"time":1635879259051,"section":"Training"},{"time":1635879307485,"section":"Bigrams With A Twist"},{"time":1635879414464,"section":"Review Form"}],"eachQuizSubmit":[{"time":1635879410965,"q0":"d"},{"time":1635879413356,"q0":"ans"}],"endTime":1635879415670}

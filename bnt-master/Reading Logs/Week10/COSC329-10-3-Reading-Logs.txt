@@ -1,0 +1,1 @@
+{"startTime":1637278177991,"eachContinue":[{"time":1637278308632,"section":"Data Collection"},{"time":1637278320386,"section":"Example Exercises"},{"time":1637278340497,"section":"Things We Measured"},{"time":1637278790292,"section":"Review Form"}],"eachQuizSubmit":[{"time":1637278788845,"q0":"ans"}],"endTime":1637278790702}
