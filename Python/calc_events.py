@@ -6,6 +6,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
+
+
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 
@@ -70,22 +72,25 @@ def main():
 
     if not events:
         print('No upcoming events found.')
+    reminders = {
+        
 
+    }
     now = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     for event in events:
+        print(event['reminders'].get(''))
         eventDate = event['start'].get('dateTime', event['start'].get('date'))
         # Values for matlab
-        print(len(events))
         busyness = get_busyness(len(events) - 1)
         eventImportance = get_importance(event.get('colorId'))
         distToEvent = get_event_dist(now, datetime.datetime.strptime(eventDate, "%Y-%m-%d"))
-        evidence = [eventImportance, distToEvent, busyness]
-        # Send to matlab for simulation
-        # actions = Run_MatlabSim.py....
-
-        # Recieve results and determine action
-
-        print(event)
+        # Send to matlab for simulation & recieve the actions desired
+        #  actions = Run_MatlabSim.run_sim(eventImportance, distToEvent, busyness, 3)
+        # # Recieve results and determine action
+        #  overrides = DetermineActions.recieveActions(event, distToEvent - 1, actions)
+        #
+        #  if overrides != "":
+        #     service.events.update(calendarId='primary', eventId=event['id'])
         # start = event['start'].get('dateTime', event['start'].get('date'))
         # print(start, event['summary'])
 
