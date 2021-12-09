@@ -14,7 +14,6 @@ for ii=1:T,
     evidence{4,ii} = CCR; % CheckedCalendar = {1 = Daily | 2 = Weekly | 3 = Monthly}
     evidence{5,ii} = BSY; % Busyness =   {1 = Not Busy | 2 = Busy | 3 = Very Busy}
 end;
-evidence;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % inference process: infer if user needs help over T time steps
@@ -48,7 +47,7 @@ actionArray = [ bestA ];
 
 exputil2 = [exputil2, euEmail];
 exputil3 = [exputil3, euPopUp];
-disp(sprintf('t=%d: best action = %s ,euEmail = %f euPopup=%f', 0, bestA,euEmail, euPopUp));
+%disp(sprintf('t=%d: best action = %s ,euEmail = %f euPopup=%f', 0, bestA,euEmail, euPopUp));
 subplot( 1, 2, 2 );
 
 plot(exputil2, '*-');
@@ -79,7 +78,7 @@ hold off;
 actionArray = [ actionArray bestA ];
 exputil2 = [exputil2, euEmail];
 exputil3 = [exputil3, euPopUp];
-disp(sprintf('t=%d: best action = %s, euEmail = %f euPopup=%f', 1, bestA,euEmail, euPopUp));
+%disp(sprintf('t=%d: best action = %s, euEmail = %f euPopup=%f', 1, bestA,euEmail, euPopUp));
 subplot( 1, 2, 2 );
 plot(exputil2, '*-');
 hold on;
@@ -101,7 +100,6 @@ for t=2:T,
         evidence{2,ii} = evidence{2,ii} - 1;
       end;
   end;
-  evidence
   
   [engine, ll(t)] = dbn_update_bel(engine, evidence(:,t-1:t));
   % extract marginals of the current belief state
@@ -118,7 +116,7 @@ for t=2:T,
   exputil2 = [exputil2, euEmail];
   exputil3 = [exputil3, euPopUp];
   
-  disp(sprintf('t=%d: best action = %s, euEmail = %f euPopup=%f', t, bestA,euEmail, euPopUp));
+  %disp(sprintf('t=%d: best action = %s, euEmail = %f euPopup=%f', t, bestA,euEmail, euPopUp));
   
   subplot( 1, 2, 2 );
   plot(exputil2, '*-');

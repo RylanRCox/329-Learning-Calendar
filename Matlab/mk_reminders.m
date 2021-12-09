@@ -7,7 +7,7 @@ DBN   = names;
 % intra-stage dependencies
 intrac = {'TimeUntilEvent','Urgency';'EventImportance','Urgency';'Busyness','NeedReminder';'CheckedCalendarRecently','NeedReminder';'Urgency', 'NeedReminder'};
 [intra, names] = mk_adj_mat( intrac, names, 1 );
-DBN = names   % potentially re-ordered names
+DBN = names;  % potentially re-ordered names
 
 %inter-stage dependencies
 interc = {...
@@ -19,7 +19,7 @@ inter = mk_adj_mat( interc, names, 0 );
 %inter = mk_adj_mat( interc, names, 0 );
 
 % observations
-onodes = [ find(cellfun(@isempty, strfind(names,'Busyness'))==0) find(cellfun(@isempty, strfind(names,'CheckedCalendarRecently'))==0) find(cellfun(@isempty, strfind(names,'TimeUntilEvent'))==0) find(cellfun(@isempty, strfind(names,'EventImportance'))==0)]
+onodes = [ find(cellfun(@isempty, strfind(names,'Busyness'))==0) find(cellfun(@isempty, strfind(names,'CheckedCalendarRecently'))==0) find(cellfun(@isempty, strfind(names,'TimeUntilEvent'))==0) find(cellfun(@isempty, strfind(names,'EventImportance'))==0)];
 onodes = sort(onodes);
 
 % discretize nodes
