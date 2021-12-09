@@ -61,7 +61,7 @@ def main():
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     end = (datetime.datetime.utcnow() + datetime.timedelta(days=7)).isoformat() + 'Z'
-    # print(now, end)
+
     print('Getting the upcoming events')
     events_result = service.events().list(calendarId='primary', timeMin=now,
                                           timeMax=end, singleEvents=True,
@@ -71,7 +71,6 @@ def main():
     if not events:
         print('No upcoming events found.')
 
-    print(events)
     now = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     for event in events:
         eventDate = event['start'].get('dateTime', event['start'].get('date'))
@@ -80,10 +79,11 @@ def main():
         busyness = get_busyness(len(events) - 1)
         eventImportance = get_importance(event.get('colorId'))
         distToEvent = get_event_dist(now, datetime.datetime.strptime(eventDate, "%Y-%m-%d"))
-        print(busyness,eventImportance,distToEvent)
+        evidence = [eventImportance, distToEvent, busyness]
         # Send to matlab for simulation
+        # actions = Run_MatlabSim.py....
 
-        #Recieve results and determine action
+        # Recieve results and determine action
 
         print(event)
         # start = event['start'].get('dateTime', event['start'].get('date'))
