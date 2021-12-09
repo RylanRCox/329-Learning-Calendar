@@ -6,7 +6,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
-
+import DetermineActions
+import Run_MatlabSim
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
@@ -31,7 +32,7 @@ def get_busyness(numEvents):
     else:
         return 2
 
-
+# Returns 1 or 2
 def get_importance(color):
     if color and color == '11':
         return 2
@@ -72,33 +73,36 @@ def main():
 
     if not events:
         print('No upcoming events found.')
-    reminders = {
-        
-
-    }
     now = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     for event in events:
-        print(event['reminders'].get(''))
         eventDate = event['start'].get('dateTime', event['start'].get('date'))
         # Values for matlab
         busyness = get_busyness(len(events) - 1)
         eventImportance = get_importance(event.get('colorId'))
         distToEvent = get_event_dist(now, datetime.datetime.strptime(eventDate, "%Y-%m-%d"))
         # Send to matlab for simulation & recieve the actions desired
-        #  actions = Run_MatlabSim.run_sim(eventImportance, distToEvent, busyness, 3)
-        # # Recieve results and determine action
-        #  overrides = DetermineActions.recieveActions(event, distToEvent - 1, actions)
+        actions = Run_MatlabSim.run_sim(eventImportance, distToEvent, busyness, 3)
+        # Recieve results and determine action
+        overrides = DetermineActions.recieveActions((eventDate - now).days - 1, actions)
         #
-        #  if overrides != "":
-        #     service.events.update(calendarId='primary', eventId=event['id'])
+        if overrides != "":
+            if event['reminders'].get('overrides') is None:
+                reminders = {
+                    'useDefault': False,
+                    'overrides':
+                        overrides
+                }
+                event['reminders'] = reminders
+                updated_event = service.events().update(calendarId='primary', eventId=event['id'],
+                                                        sendNotifications=True, body=event).execute()
+                print(updated_event['updated'])
+                print(updated_event['reminders'])
+            else:
+                print("This event already has reminders set!")
+
         # start = event['start'].get('dateTime', event['start'].get('date'))
         # print(start, event['summary'])
 
 
 if __name__ == '__main__':
     main()
-
-# TODO: Get event data regarding distance to event, how important the event is
-# TODO: Get data regarding how busy user schedule is, and when the last time they checked their calendar was
-#
-#
