@@ -8,6 +8,35 @@ from google.oauth2.credentials import Credentials
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
+
+# Returns 1, 2, or 3
+def get_event_dist(now, eventDate):
+    distToEvent = (eventDate - now).days
+    if distToEvent <= 2:
+        return 1
+    elif distToEvent > 5:
+        return 3
+    else:
+        return 2
+
+
+# Returns 1, 2 or 3
+def get_busyness(numEvents):
+    if numEvents < 10:
+        return 1
+    elif numEvents >= 20:
+        return 3
+    else:
+        return 2
+
+
+def get_importance(color):
+    if color and color == '11':
+        return 2
+    else:
+        return 1
+
+
 def main():
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
@@ -31,17 +60,34 @@ def main():
 
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
+    end = (datetime.datetime.utcnow() + datetime.timedelta(days=7)).isoformat() + 'Z'
+    # print(now, end)
+    print('Getting the upcoming events')
     events_result = service.events().list(calendarId='primary', timeMin=now,
-                                          maxResults=10, singleEvents=True,
+                                          timeMax=end, singleEvents=True,
                                           orderBy='startTime').execute()
     events = events_result.get('items', [])
 
     if not events:
         print('No upcoming events found.')
+
+    print(events)
+    now = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+        eventDate = event['start'].get('dateTime', event['start'].get('date'))
+        # Values for matlab
+        print(len(events))
+        busyness = get_busyness(len(events) - 1)
+        eventImportance = get_importance(event.get('colorId'))
+        distToEvent = get_event_dist(now, datetime.datetime.strptime(eventDate, "%Y-%m-%d"))
+        print(busyness,eventImportance,distToEvent)
+        # Send to matlab for simulation
+
+        #Recieve results and determine action
+
+        print(event)
+        # start = event['start'].get('dateTime', event['start'].get('date'))
+        # print(start, event['summary'])
 
 
 if __name__ == '__main__':
