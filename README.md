@@ -28,16 +28,23 @@ Our DBN runs in Matlab and is able to be called from Python outputting desired v
     - contains all necessary files to run a DBN engine within Matlab. (Not written by us)
 2. Matlab
     - All files pertaining to Matlab and running the DBN and calculating expected actions for each day.
-        - get_remindermeu.m calculates the expected utility of each action
-        - mk_reminders.m creates our DBN.
-        - sim_reminder.m uses a matlab engine to simulate our DBN over the span of a week and outputs the best option for each day of the week.
-        - simulation.m is a helper file that allows for our Python files to easily call our Matlab functions.
-        - util_needreminder.m calculates the utility value of an action.
+        - **get_remindermeu.m** calculates the expected utility of each action
+        - **mk_reminders.m** creates our DBN.
+        - **sim_reminder.m** uses a matlab engine to simulate our DBN over the span of a week and outputs the best option for each day of the week.
+        - **simulation.m** is a helper file that allows for our Python files to easily call our Matlab functions.
+        - **util_needreminder.m** calculates the utility value of an action.
 3. Python
     - All files pertaining to Python and calling the Google Calendar API.
-        - 
+        - **calc_events.py**
+        - **credentials.json** is a json that contains the credentials for the google calendar API.
+        - **DetermineActions.py** contains all the functions to create the actions made by our system based off of the calculate action values.
+        - **init.m** is a helper file for Run_MatlabSim.py that initializes the Matlab engine to be used.
+        - **Run_MatlabSim.py** contains a function to run and retrieve data from the Matlab engine containing our DBN.
+        - **token.js** stores the users access and refresh tokens.
 4. Documentation
     - All documentation files including the final report.
+        - **DBNModel.pdf** is a pdf file of what our DBN model looks like.
+        - **FinalCPTs.xlsx** is an excel file containing our hand-crafted CPTs.
 # Requirements to run the program
 To run this program you will need to have both python and matlab installed. The links for both of those are as follows: [Matlab Install](https://www.mathworks.com/help/install/), [Python Install](https://www.python.org/downloads/).
 
