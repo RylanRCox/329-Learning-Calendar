@@ -32,6 +32,7 @@ def get_busyness(numEvents):
     else:
         return 2
 
+
 # Returns 1 or 2
 def get_importance(color):
     if color and color == '11':
@@ -75,11 +76,11 @@ def main():
         print('No upcoming events found.')
     now = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     for event in events:
-        eventDate = event['start'].get('dateTime', event['start'].get('date'))
+        eventDate = datetime.datetime.strptime(event['start'].get('dateTime', event['start'].get('date')), "%Y-%m-%d")
         # Values for matlab
         busyness = get_busyness(len(events) - 1)
         eventImportance = get_importance(event.get('colorId'))
-        distToEvent = get_event_dist(now, datetime.datetime.strptime(eventDate, "%Y-%m-%d"))
+        distToEvent = get_event_dist(now, eventDate)
         # Send to matlab for simulation & recieve the actions desired
         actions = Run_MatlabSim.run_sim(eventImportance, distToEvent, busyness, 3)
         print(actions)
