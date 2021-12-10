@@ -104,7 +104,7 @@ def main(checkedCalendarFreq, reset):
             actions = Run_MatlabSim.run_sim(eventImportance, distToEvent, busyness, checkedCalendarFreq)
             print(actions)
             # Recieve results and determine action
-            overrides = DetermineActions.recieveActions((eventDate - now).days, actions)
+            overrides = DetermineActions.recieveActions((eventDate - now).days + 1, actions[1::])
             #
             if overrides:
                 if event['reminders'].get('overrides') is None:
@@ -123,4 +123,4 @@ def main(checkedCalendarFreq, reset):
 
 
 if __name__ == '__main__':
-    main(3, True)
+    main(1, False)

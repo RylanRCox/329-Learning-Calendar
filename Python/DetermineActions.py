@@ -1,6 +1,6 @@
 # ['Mon', 'Tues', 'Wed', 'Thur', 'Fr', 'Sat', 'Sun']['Mon', 'Tues', 'Wed', 'Thur', 'Fr', 'Sat', 'Sun']
 #    0      1      2      3       4       5      6     0      1      2      3       4       5      6
-# ['Email','None','popup','Email','None','popup','None']
+# ['Email','Email','popup','popup','popup','popup','popup']
 
 def recieveActions(eventIndex, actions):
     actionList = []
@@ -11,7 +11,7 @@ def recieveActions(eventIndex, actions):
         #
         if action == "popup":
             if popcount < 3:
-                actionList.append((index, action))
+                actionList.append((eventIndex - popcount, action))
                 popcount += 1
         elif not sentEmail and action != "none":
             actionList.append((index, action))
