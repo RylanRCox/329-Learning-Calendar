@@ -9,7 +9,7 @@ from google.oauth2.credentials import Credentials
 import DetermineActions
 import Run_MatlabSim
 
-SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 
 # Returns 1, 2, or 3
