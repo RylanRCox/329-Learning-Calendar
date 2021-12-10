@@ -25,6 +25,6 @@ def recieveActions(eventIndex, actions):
 
 
 def attachReminder(action, eventIndex, dateIndex):
-    return {'method': action, 'minutes': (60 * 24) * (eventIndex - dateIndex)}
+    return {'method': action, 'minutes': (60 * 24) * (abs(eventIndex - dateIndex))}
 
 # recieveActions(6, ['popup','None','popup','popup','popup','popup','popup'])

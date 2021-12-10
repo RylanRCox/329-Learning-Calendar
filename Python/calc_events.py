@@ -25,9 +25,9 @@ def get_event_dist(now, eventDate):
 
 # Returns 1, 2 or 3
 def get_busyness(numEvents):
-    if numEvents < 10:
+    if numEvents < 5:
         return 1
-    elif numEvents >= 20:
+    elif numEvents >= 10:
         return 3
     else:
         return 2
@@ -41,7 +41,7 @@ def get_importance(color):
         return 1
 
 
-def main(checkedCalendarFreq,reset):
+def main(checkedCalendarFreq, reset):
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -64,14 +64,14 @@ def main(checkedCalendarFreq,reset):
 
     # Call the Calendar API
     # Sets date to the 12th
-    now = (datetime.datetime.utcnow()+ datetime.timedelta(days=3)).isoformat() + 'Z'  # 'Z' indicates UTC time
+    now = (datetime.datetime.utcnow() + datetime.timedelta(days=3)).isoformat() + 'Z'  # 'Z' indicates UTC time
     # Sets date to the 19th
     # now = (datetime.datetime.utcnow() + datetime.timedelta(days=10)).isoformat() + 'Z'  # 'Z' indicates UTC time
     # sets date to the 26th
     # now = (datetime.datetime.utcnow() + datetime.timedelta(days=17)).isoformat() + 'Z'  # 'Z' indicates UTC time
 
-    #For actual use
-    #now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+    # For actual use
+    # now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     end = (datetime.datetime.utcnow() + datetime.timedelta(days=7)).isoformat() + 'Z'
 
     print('Getting the upcoming events')
@@ -90,7 +90,8 @@ def main(checkedCalendarFreq,reset):
                                                     sendNotifications=True, body=event).execute()
         else:
 
-            eventDate = datetime.datetime.strptime(event['start'].get('dateTime', event['start'].get('date')), "%Y-%m-%d")
+            eventDate = datetime.datetime.strptime(event['start'].get('dateTime', event['start'].get('date')),
+                                                   "%Y-%m-%d")
             # Values for matlab
             busyness = get_busyness(len(events) - 1)
             eventImportance = get_importance(event.get('colorId'))
@@ -118,4 +119,4 @@ def main(checkedCalendarFreq,reset):
 
 
 if __name__ == '__main__':
-    main(3,False)
+    main(3, False)
