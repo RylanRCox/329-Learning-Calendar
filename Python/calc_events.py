@@ -41,7 +41,7 @@ def get_importance(color):
         return 1
 
 
-def main():
+def main(checkedCalendarFreq,reset):
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -76,35 +76,38 @@ def main():
         print('No upcoming events found.')
     now = datetime.datetime.strptime(now, "%Y-%m-%dT%H:%M:%S.%fZ")
     for event in events:
-        eventDate = datetime.datetime.strptime(event['start'].get('dateTime', event['start'].get('date')), "%Y-%m-%d")
-        # Values for matlab
-        busyness = get_busyness(len(events) - 1)
-        eventImportance = get_importance(event.get('colorId'))
-        distToEvent = get_event_dist(now, eventDate)
-        # Send to matlab for simulation & recieve the actions desired
-        actions = Run_MatlabSim.run_sim(eventImportance, distToEvent, busyness, 3)
-        print(actions)
-        # Recieve results and determine action
-        overrides = DetermineActions.recieveActions((eventDate - now).days - 1, actions)
-        #
-        if overrides:
-            if event['reminders'].get('overrides') is None:
-                reminders = {
-                    'useDefault': False,
-                    'overrides':
-                        overrides
-                }
-                event['reminders'] = reminders
-                updated_event = service.events().update(calendarId='primary', eventId=event['id'],
-                                                        sendNotifications=True, body=event).execute()
-                print(updated_event['updated'])
-                print(updated_event['reminders'])
-            else:
-                print("This event already has reminders set!")
+        if reset:
+            event['reminders'] = {'useDefault': False}
+            updated_event = service.events().update(calendarId='primary', eventId=event['id'],
+                                                    sendNotifications=True, body=event).execute()
+        else:
 
-        # start = event['start'].get('dateTime', event['start'].get('date'))
-        # print(start, event['summary'])
+            eventDate = datetime.datetime.strptime(event['start'].get('dateTime', event['start'].get('date')), "%Y-%m-%d")
+            # Values for matlab
+            busyness = get_busyness(len(events) - 1)
+            eventImportance = get_importance(event.get('colorId'))
+            distToEvent = get_event_dist(now, eventDate)
+            # Send to matlab for simulation & recieve the actions desired
+            actions = Run_MatlabSim.run_sim(eventImportance, distToEvent, busyness, checkedCalendarFreq)
+            print(actions)
+            # Recieve results and determine action
+            overrides = DetermineActions.recieveActions((eventDate - now).days - 1, actions)
+            #
+            if overrides:
+                if event['reminders'].get('overrides') is None:
+                    reminders = {
+                        'useDefault': False,
+                        'overrides':
+                            overrides
+                    }
+                    event['reminders'] = reminders
+                    updated_event = service.events().update(calendarId='primary', eventId=event['id'],
+                                                            sendNotifications=True, body=event).execute()
+                    print(updated_event['updated'])
+                    print(updated_event['reminders'])
+                else:
+                    print("This event already has reminders set!")
 
 
 if __name__ == '__main__':
-    main()
+    main(3,True)
