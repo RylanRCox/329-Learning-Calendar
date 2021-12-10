@@ -82,10 +82,11 @@ def main():
         distToEvent = get_event_dist(now, datetime.datetime.strptime(eventDate, "%Y-%m-%d"))
         # Send to matlab for simulation & recieve the actions desired
         actions = Run_MatlabSim.run_sim(eventImportance, distToEvent, busyness, 3)
+        print(actions)
         # Recieve results and determine action
         overrides = DetermineActions.recieveActions((eventDate - now).days - 1, actions)
         #
-        if overrides != "":
+        if overrides:
             if event['reminders'].get('overrides') is None:
                 reminders = {
                     'useDefault': False,
