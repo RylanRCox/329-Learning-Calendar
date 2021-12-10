@@ -12,7 +12,7 @@ def recieveActions(eventIndex, actions):
             if popcount < 3:
                 actionList.append((index, action))
                 popcount += 1
-        elif action not in actionList and action != "None":
+        elif action not in actionList and action != "none":
             actionList.append((index, action))
         # Ignore actions suggested past the date of the event as we don't want to send reminders past the event
         if index == eventIndex:
