@@ -63,7 +63,15 @@ def main(checkedCalendarFreq,reset):
     service = build('calendar', 'v3', credentials=creds)
 
     # Call the Calendar API
-    now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+    # Sets date to the 12th
+    now = (datetime.datetime.utcnow()+ datetime.timedelta(days=3)).isoformat() + 'Z'  # 'Z' indicates UTC time
+    # Sets date to the 19th
+    # now = (datetime.datetime.utcnow() + datetime.timedelta(days=10)).isoformat() + 'Z'  # 'Z' indicates UTC time
+    # sets date to the 26th
+    # now = (datetime.datetime.utcnow() + datetime.timedelta(days=17)).isoformat() + 'Z'  # 'Z' indicates UTC time
+
+    #For actual use
+    #now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     end = (datetime.datetime.utcnow() + datetime.timedelta(days=7)).isoformat() + 'Z'
 
     print('Getting the upcoming events')
