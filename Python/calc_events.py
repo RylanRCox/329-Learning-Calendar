@@ -64,14 +64,18 @@ def main(checkedCalendarFreq, reset):
 
     # Call the Calendar API
     # Sets date to the 12th
-    now = (datetime.datetime.utcnow() + datetime.timedelta(days=3)).isoformat() + 'Z'  # 'Z' indicates UTC time
+    # now = (datetime.datetime.utcnow() + datetime.timedelta(days=3))  # 'Z' indicates UTC time
+    # end = (now + datetime.timedelta(days=10)).isoformat() + 'Z'
+    # now = now.isoformat() + 'Z'
     # Sets date to the 19th
     # now = (datetime.datetime.utcnow() + datetime.timedelta(days=10)).isoformat() + 'Z'  # 'Z' indicates UTC time
+    # end = (datetime.datetime.utcnow() + datetime.timedelta(days=17)).isoformat() + 'Z'
     # sets date to the 26th
     # now = (datetime.datetime.utcnow() + datetime.timedelta(days=17)).isoformat() + 'Z'  # 'Z' indicates UTC time
+    # end = (datetime.datetime.utcnow() + datetime.timedelta(days=24)).isoformat() + 'Z'
 
     # For actual use
-    # now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+    now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     end = (datetime.datetime.utcnow() + datetime.timedelta(days=7)).isoformat() + 'Z'
 
     print('Getting the upcoming events')
@@ -100,7 +104,7 @@ def main(checkedCalendarFreq, reset):
             actions = Run_MatlabSim.run_sim(eventImportance, distToEvent, busyness, checkedCalendarFreq)
             print(actions)
             # Recieve results and determine action
-            overrides = DetermineActions.recieveActions((eventDate - now).days - 1, actions)
+            overrides = DetermineActions.recieveActions((eventDate - now).days, actions)
             #
             if overrides:
                 if event['reminders'].get('overrides') is None:
@@ -119,4 +123,4 @@ def main(checkedCalendarFreq, reset):
 
 
 if __name__ == '__main__':
-    main(3, False)
+    main(3, True)
