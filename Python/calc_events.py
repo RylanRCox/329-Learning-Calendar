@@ -123,4 +123,4 @@ def main(checkedCalendarFreq, reset):
 
 
 if __name__ == '__main__':
-    main(1, False)
+    main(2, False)
