@@ -1,6 +1,8 @@
 from __future__ import print_function
 import datetime
 import os.path
+import sys
+
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -62,18 +64,6 @@ def main(checkedCalendarFreq, reset):
 
     service = build('calendar', 'v3', credentials=creds)
 
-    # Call the Calendar API
-    # Sets date to the 12th
-    # now = (datetime.datetime.utcnow() + datetime.timedelta(days=3))  # 'Z' indicates UTC time
-    # end = (now + datetime.timedelta(days=10)).isoformat() + 'Z'
-    # now = now.isoformat() + 'Z'
-    # Sets date to the 19th
-    # now = (datetime.datetime.utcnow() + datetime.timedelta(days=10)).isoformat() + 'Z'  # 'Z' indicates UTC time
-    # end = (datetime.datetime.utcnow() + datetime.timedelta(days=17)).isoformat() + 'Z'
-    # sets date to the 26th
-    # now = (datetime.datetime.utcnow() + datetime.timedelta(days=17)).isoformat() + 'Z'  # 'Z' indicates UTC time
-    # end = (datetime.datetime.utcnow() + datetime.timedelta(days=24)).isoformat() + 'Z'
-
     # For actual use
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     end = (datetime.datetime.utcnow() + datetime.timedelta(days=7)).isoformat() + 'Z'
@@ -123,4 +113,5 @@ def main(checkedCalendarFreq, reset):
 
 
 if __name__ == '__main__':
-    main(2, False)
+    # main(1, False)
+    main(sys.argv[0], sys.argv[1])

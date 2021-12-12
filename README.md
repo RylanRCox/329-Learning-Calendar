@@ -36,9 +36,9 @@ then process these actions in Python, and attach the appropriate reminders to th
         - **util_needreminder.m** calculates the utility value of an action.
 3. Python
     - This folder contains all Python code, including the code which calls the Google Calendar API.
-        - **calc_events.py** The main python file that is run in order to query the calendar API, as well as send the respective actions back to the api.
+        - **calc_events.py** The main python file that is run in order to query the calendar API, as well as send the respective actions back to the api. 
         - **credentials.json** is a json that contains the developer credentials in order to access the Google Calendar API.
-        - **DetermineActions.py** contains all the functions to create the actions made by our system based off of the calculate action values.
+        - **DetermineActions.py** A helper file for calc_events.py which contains all the functions to create the actions made by our system based off of the calculate action values. It contains logic for parsing the action array recieved from matlab, and returns an array of reminders that are sent back to the calendar API.
         - **init.m** is a helper file for Run_MatlabSim.py that initializes the Matlab engine to be used.
         - **Run_MatlabSim.py** contains a function to run and retrieve data from the Matlab engine containing our DBN.
         - **token.js** stores the users access and refresh tokens. This is created after the first succesful run of calc_events.py
@@ -46,12 +46,42 @@ then process these actions in Python, and attach the appropriate reminders to th
     - All documentation files including the final report.
         - **DBNModel.pdf** is a pdf file of what our DBN model looks like.
         - **FinalCPTs.xlsx** is an excel file containing our hand-crafted CPTs.
-# Requirements to run the program
-To run this program you will need to have both python and matlab installed. The links for both of those are as follows: [Matlab Install](https://www.mathworks.com/help/install/), [Python Install](https://www.python.org/downloads/).
+# Running the program
 
-As well, you will need to install Matlab Engine API for python in order for our code to run. The instructions for that are as follows: [Matlab Engine](https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html).
+- **Matlab**
+    - In order to run the DBN within matlab, you must ensure that the bnt-master package has been initialized correctly. To do so, you must add the folder to your path. There are two ways of doing so, either running init.m within the python folder, or manually running the following code in the matlab console:
+        
+            cd ../bnt-master
+            addpath( genpathKPM(pwd) )
+            cd ../Matlab
+            addpath( genpathKPM(pwd) ) 
+    - Once you have added bnt-master to your path, you can simulate the DBN using the command
 
-In addition, you will need to give the google calendar API access to your calendar. **Because our application has not been reviewed by google, the email you give access to must be in the list of approved emails.** 
+            actionArray = sim_reminder( mk_reminders, IMP, TUE, CCR, BSY )
+        - IMP is the event importance, and allows a value of either 1 or 2, Not important, and important respectively.
+        - TUE is the time until the event, a value between 1 and 3 where 1 is very close, and 3 is very far. Very close is defined as an event being within 2 days, and very far is defined as an event being more than 5 days away. Any event in between is defined as being a medium distance, and correlates to the value of 2.
+        - CCR is equivalent to the Checked Calendar Recently node, which is a value set by the user when calling the Python code. It takes in values from 1-3, correlating to a user checking their calendar daily, weekly, and monthly respectively.
+        - BSY is the busyness of a user, determined by how many events are within the 7 day period we query. There are 3 possible values, again ranging from 1-3. The possible values are as follows: Not busy(1), Busy(2), and Very Busy(3). If a user has less than 5 events in their calendar, they are not busy. If they have more than 10 events, they are very busy. Any value in between suggests a user is busy.
 
-   - An email account will be provided for easy test access, however, I have also given access to the google account associated with bowen.hui@ubc.ca
-   - If you have any issues accessing with the provided credentials, please email logandavidparker@gmail.com
+- **Python**
+
+    - To run this program you will need to have both python and matlab installed. The links for both of those are as follows: [Matlab Install](https://www.mathworks.com/help/install/), [Python Install](https://www.python.org/downloads/).
+
+    - As well, you will need to install Matlab Engine API for python in order for our code to run. The instructions for that are as follows: [Matlab Engine](https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html).
+
+    - In addition, you will need to give the google calendar API access to your calendar. **Because our application has not been reviewed by google, the email you give access to must be in the list of approved emails.** 
+
+        - An email account will be provided for easy test access, however, I have also given access to the google account associated with bowen.hui@ubc.ca
+        - **If you have any issues accessing with the provided credentials, please email logandavidparker@gmail.com**
+
+    - Once the following prerequisites are done, you can run the python code using the command
+            
+            %python calc_events.py CCR Reset?
+
+        - CCR is the Checked Calendar Recently node, which is a value set based on your preferences. It takes in values from 1-3, correlating to a user checking their calendar daily, weekly, and monthly respectively. If you do not enter in a valid integer, you will run into an error running this code.
+
+        - Reset? is a boolean flag used for testing, if this value is set to True, it will reset all the reminders set to events within the 7 days that are being read from the calendar. **When running the program with the goal of setting reminders, ensure the Reset? value is set to False.**
+    - You can also run the program by commenting out line 117: main(sys.argv[0], sys.argv[1]) and uncommenting line 116: main(1, False). You can then set the parameters through that line, and execute the program using an editor of your choice.
+
+
+
